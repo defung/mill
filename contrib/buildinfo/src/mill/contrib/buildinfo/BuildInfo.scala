@@ -18,6 +18,11 @@ trait BuildInfo extends JavaModule {
   def buildInfoObjectName: String = "BuildInfo"
 
   /**
+   * the interface that this class should extend. Must include the full package path.
+   */
+  def buildInfoInterface: Option[String] = None
+
+  /**
    * Enable to compile the BuildInfo values directly into the classfiles,
    * rather than the default behavior of storing them as a JVM resource. Needed
    * to use BuildInfo on Scala.js which does not support JVM resources
@@ -120,7 +125,7 @@ object BuildInfo {
       s"""
          |package $buildInfoPackageName
          |
-         |object $buildInfoObjectName {
+         |object $buildInfoObjectName${buildInfoInterface.map(i => s" extends $i").getOrElse("")} {
          |  $bindingsCode
          |  val toMap = Map[String, String](
          |    $mapEntries
@@ -135,7 +140,7 @@ object BuildInfo {
       s"""
          |package $buildInfoPackageName;
          |
-         |public class $buildInfoObjectName {
+         |public class $buildInfoObjectName${buildInfoInterface.map(i => s" extends $i").getOrElse("")} {
          |  $bindingsCode
          |
          |  public static java.util.Map<String, String> toMap() {
@@ -170,7 +175,7 @@ object BuildInfo {
       s"""
          |package ${buildInfoPackageName}
          |
-         |object $buildInfoObjectName {
+         |object $buildInfoObjectName${buildInfoInterface.map(i => s" extends $i").getOrElse("")} {
          |  private[this] val buildInfoProperties: java.util.Properties = new java.util.Properties()
          |
          |  {
@@ -193,7 +198,7 @@ object BuildInfo {
       s"""
          |package ${buildInfoPackageName};
          |
-         |public class $buildInfoObjectName {
+         |public class $buildInfoObjectName${buildInfoInterface.map(i => s" extends $i").getOrElse("")} {
          |  private static final java.util.Properties buildInfoProperties = new java.util.Properties();
          |
          |  static {
