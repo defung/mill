@@ -20,7 +20,7 @@ trait BuildInfo extends JavaModule {
   /**
    * the interface that this class should extend. Must include the full package path.
    */
-  def buildInfoInterface: Option[String] = None
+  def buildInfoInterfaceName: Option[String] = None
 
   /**
    * Enable to compile the BuildInfo values directly into the classfiles,
@@ -125,7 +125,7 @@ object BuildInfo {
       s"""
          |package $buildInfoPackageName
          |
-         |object $buildInfoObjectName${buildInfoInterface.map(i => s" extends $i").getOrElse("")} {
+         |object $buildInfoObjectName${buildInfoInterfaceName.map(i => s" extends $i").getOrElse("")} {
          |  $bindingsCode
          |  val toMap = Map[String, String](
          |    $mapEntries
@@ -140,7 +140,7 @@ object BuildInfo {
       s"""
          |package $buildInfoPackageName;
          |
-         |public class $buildInfoObjectName${buildInfoInterface.map(i => s" extends $i").getOrElse("")} {
+         |public class $buildInfoObjectName${buildInfoInterfaceName.map(i => s" extends $i").getOrElse("")} {
          |  $bindingsCode
          |
          |  public static java.util.Map<String, String> toMap() {
@@ -175,7 +175,7 @@ object BuildInfo {
       s"""
          |package ${buildInfoPackageName}
          |
-         |object $buildInfoObjectName${buildInfoInterface.map(i => s" extends $i").getOrElse("")} {
+         |object $buildInfoObjectName${buildInfoInterfaceName.map(i => s" extends $i").getOrElse("")} {
          |  private[this] val buildInfoProperties: java.util.Properties = new java.util.Properties()
          |
          |  {
@@ -198,7 +198,7 @@ object BuildInfo {
       s"""
          |package ${buildInfoPackageName};
          |
-         |public class $buildInfoObjectName${buildInfoInterface.map(i => s" extends $i").getOrElse("")} {
+         |public class $buildInfoObjectName${buildInfoInterfaceName.map(i => s" extends $i").getOrElse("")} {
          |  private static final java.util.Properties buildInfoProperties = new java.util.Properties();
          |
          |  static {
